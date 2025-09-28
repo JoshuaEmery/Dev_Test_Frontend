@@ -1,49 +1,17 @@
-import JestTest from './components/JestTest/JestTest'
-import { useTasks } from './hooks/useTasks'
-import { useEffect } from 'react'
-
-// Example component showing how to use the context
-function TaskListExample() {
-  const { tasks, loading, error, getTasks, clearError } = useTasks();
-
-  useEffect(() => {
-    getTasks();
-  }, [getTasks]);
-
-  if (loading) {
-    return <div>Loading tasks...</div>;
-  }
-
-  if (error) {
-    return (
-      <div>
-        <p>Error: {error}</p>
-        <button onClick={clearError}>Clear Error</button>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <h1>Tasks ({tasks.length})</h1>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            {task.title} - {task.completed ? '✅' : '⏳'}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+import { TaskProvider } from './context/TaskContext';
+import TaskForm from './components/TaskForm/TaskForm';
+import TaskList from './components/TaskList/TaskList';
 
 function App() {
   return (
-    <>
-      <JestTest />
-      <TaskListExample />
-    </>
-  )
+    <TaskProvider>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+        <h1>Task Management App</h1>
+        <TaskForm />
+        <TaskList />
+      </div>
+    </TaskProvider>
+  );
 }
 
-export default App
+export default App;

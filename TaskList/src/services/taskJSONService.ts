@@ -1,7 +1,7 @@
 //Service that reads the test data, fetch delays are simulated.
 import { type ITaskService, type Task, type CreateTaskInput, type UpdateTaskInput } from "./types";
 import tasksData from "../data/sample_tasks_data.json";
-const delay = 100; //100ms delay
+const delay = 500; //100ms delay
 
 export class TaskJSONService implements ITaskService {
     private tasks: Task[] = [...tasksData];

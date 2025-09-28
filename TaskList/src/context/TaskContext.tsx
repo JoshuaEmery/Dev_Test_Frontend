@@ -12,7 +12,8 @@ const initialState: TaskContextState = {
   lastUpdated: null,
 };
 
-// Reducer function for state management
+//This is a function that takes in the current state and an action to be performs.
+//It returns a new state based on the action. This is provided to the useReducer hook.
 function taskReducer(state: TaskContextState, action: TaskAction): TaskContextState {
   switch (action.type) {
     case 'SET_LOADING':
@@ -77,7 +78,9 @@ function taskReducer(state: TaskContextState, action: TaskAction): TaskContextSt
     case 'RESET_STATE':
       return initialState;
 
-    // Optimistic update cases
+    //These are the optimistic update cases
+    //These cases will show the user the task immediately. They are called first
+    //before the actual API call is made.
     case 'OPTIMISTIC_ADD_TASK':
       return {
         ...state,
@@ -101,7 +104,8 @@ function taskReducer(state: TaskContextState, action: TaskAction): TaskContextSt
         lastUpdated: Date.now(),
       };
 
-    // Revert optimistic updates
+    // These are the revert optimistic update cases
+    // These are called if the API call fails.
     case 'REVERT_OPTIMISTIC_ADD':
       return {
         ...state,
@@ -142,12 +146,16 @@ function useTaskContext(): TaskContextValue {
   return context;
 }
 
-// TaskProvider component
+// TaskProvider component - This will expose the context to the UI
+// We will wrap children components in this provider.
 export function TaskProvider({ children }: TaskProviderProps): React.ReactElement {
+    //useReducer with intial state and the reducer function
   const [state, dispatch] = useReducer(taskReducer, initialState);
+  //create a service using ref. This is used to avoid re-creating the service on every render.
   const serviceRef = useRef(getTaskService());
 
-  // Memoized action creators to prevent unnecessary re-renders
+  // useCallback is used to prevent re-rendering the component unless the dependencies change.
+  //Empty dependency array means it will only be called once.
   const getTasks = useCallback(async (): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
