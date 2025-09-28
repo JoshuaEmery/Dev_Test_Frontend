@@ -1,0 +1,17 @@
+DATA FLOW ARCHITECTURE
+Recommended Flow:
+
+Components → Call hooks for data operations
+Hooks → Implement business logic, call context methods
+Context → Manage global state, call services
+Services → Handle external API operations
+Types → Provide type safety throughout
+Utils → Support pure utility operations
+
+Key Principles:
+
+Each layer has single responsibility
+Data flows unidirectionally
+Pure functions where possible
+Clear separation of concerns
+Consistent error handling patterns

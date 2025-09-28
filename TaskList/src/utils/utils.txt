@@ -1,0 +1,24 @@
+Purpose: Pure Utility Functions - If a function connects to external system (API) it should go in servvices
+// constants.ts - Application constants
+
+API endpoints
+Configuration values
+Default values
+Environment variables
+Static data
+
+// formatters.ts - Data formatting utilities
+
+Date formatting functions
+Number formatting functions
+String manipulation utilities
+Display formatting helpers
+Pure functions only
+
+// validation.ts - Validation utilities
+
+Form validation functions
+Data validation rules
+Input sanitization
+Business rule validators
+Pure functions only
