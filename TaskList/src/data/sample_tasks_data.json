@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "title": "Setup ZIO development environment",
+    "description": "Install Scala 3, SBT, and configure ZIO dependencies for the backend API",
+    "completed": true,
+    "createdAt": "2024-01-15T09:00:00Z",
+    "updatedAt": "2024-01-15T14:30:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Implement task creation API endpoint",
+    "description": "Create POST /tasks endpoint with ZIO-JSON serialization and proper error handling",
+    "completed": true,
+    "createdAt": "2024-01-16T10:15:00Z",
+    "updatedAt": "2024-01-17T16:45:00Z"
+  },
+  {
+    "id": 3,
+    "title": "Design H2 database schema",
+    "description": "Create tasks table with appropriate columns and constraints for the Task case class",
+    "completed": true,
+    "createdAt": "2024-01-17T08:30:00Z",
+    "updatedAt": "2024-01-17T11:20:00Z"
+  },
+  {
+    "id": 4,
+    "title": "Build React TaskForm component",
+    "description": "Create form with title/description inputs, validation, and submission handling using TypeScript",
+    "completed": false,
+    "createdAt": "2024-01-18T13:45:00Z",
+    "updatedAt": "2024-01-18T13:45:00Z"
+  },
+  {
+    "id": 5,
+    "title": "Implement task list display",
+    "description": null,
+    "completed": false,
+    "createdAt": "2024-01-18T14:00:00Z",
+    "updatedAt": "2024-01-18T14:00:00Z"
+  },
+  {
+    "id": 6,
+    "title": "Add task completion toggle functionality",
+    "description": "Allow users to mark tasks as complete/incomplete with PUT /tasks/:id endpoint",
+    "completed": false,
+    "createdAt": "2024-01-19T09:30:00Z",
+    "updatedAt": "2024-01-19T09:30:00Z"
+  },
+  {
+    "id": 7,
+    "title": "Write ZIO unit tests for task service",
+    "description": "Create comprehensive tests for CRUD operations using ZIO Test framework",
+    "completed": false,
+    "createdAt": "2024-01-19T11:15:00Z",
+    "updatedAt": "2024-01-19T11:15:00Z"
+  },
+  {
+    "id": 8,
+    "title": "Implement ZIO error handling",
+    "description": "Add proper ZIO error types and error recovery for database operations",
+    "completed": false,
+    "createdAt": "2024-01-20T10:00:00Z",
+    "updatedAt": "2024-01-20T10:00:00Z"
+  },
+  {
+    "id": 9,
+    "title": "Style application with CSS modules",
+    "description": "Create responsive design with clean, modern styling for all React components",
+    "completed": false,
+    "createdAt": "2024-01-20T15:20:00Z",
+    "updatedAt": "2024-01-20T15:20:00Z"
+  },
+  {
+    "id": 10,
+    "title": "Configure CORS for API",
+    "description": null,
+    "completed": false,
+    "createdAt": "2024-01-21T12:30:00Z",
+    "updatedAt": "2024-01-21T12:30:00Z"
+  },
+  {
+    "id": 11,
+    "title": "Setup Quill for SQL operations",
+    "description": "Configure Quill library for type-safe database queries with ZIO integration",
+    "completed": true,
+    "createdAt": "2024-01-22T08:45:00Z",
+    "updatedAt": "2024-01-22T16:20:00Z"
+  },
+  {
+    "id": 12,
+    "title": "Fix bug in task deletion endpoint",
+    "description": "DELETE /tasks/:id should return 204 No Content instead of 404 for successful deletions",
+    "completed": true,
+    "createdAt": "2024-01-15T16:30:00Z",
+    "updatedAt": "2024-01-16T09:15:00Z"
+  },
+  {
+    "id": 13,
+    "title": "Add input validation with ZIO",
+    "description": "Implement server-side validation using ZIO validation combinators",
+    "completed": false,
+    "createdAt": "2024-01-23T14:00:00Z",
+    "updatedAt": "2024-01-23T14:00:00Z"
+  },
+  {
+    "id": 14,
+    "title": "Optimize database connection pool",
+    "description": null,
+    "completed": false,
+    "createdAt": "2024-01-23T16:45:00Z",
+    "updatedAt": "2024-01-23T16:45:00Z"
+  },
+  {
+    "id": 15,
+    "title": "Research ZIO best practices",
+    "description": "Study ZIO documentation and examples for proper effect management and resource safety",
+    "completed": true,
+    "createdAt": "2024-01-14T10:00:00Z",
+    "updatedAt": "2024-01-15T17:30:00Z"
+  },
+  {
+    "id": 16,
+    "title": "Implement TaskContext provider",
+    "description": "Create React Context for centralized task state management with TypeScript",
+    "completed": false,
+    "createdAt": "2024-01-24T09:15:00Z",
+    "updatedAt": "2024-01-24T09:15:00Z"
+  },
+  {
+    "id": 17,
+    "title": "Setup Vite build configuration",
+    "description": "Configure Vite for TypeScript, CSS modules, and environment variables",
+    "completed": true,
+    "createdAt": "2024-01-24T11:30:00Z",
+    "updatedAt": "2024-01-24T13:45:00Z"
+  },
+  {
+    "id": 18,
+    "title": "Create database migration scripts",
+    "description": null,
+    "completed": false,
+    "createdAt": "2024-01-25T08:00:00Z",
+    "updatedAt": "2024-01-25T08:00:00Z"
+  },
+  {
+    "id": 19,
+    "title": "Test API with Postman",
+    "description": "Create comprehensive test collection for all CRUD endpoints",
+    "completed": false,
+    "createdAt": "2024-01-25T14:20:00Z",
+    "updatedAt": "2024-01-25T14:20:00Z"
+  },
+  {
+    "id": 20,
+    "title": "Write project README",
+    "description": "Document setup instructions, API endpoints, and design decisions",
+    "completed": false,
+    "createdAt": "2024-01-26T10:30:00Z",
+    "updatedAt": "2024-01-26T10:30:00Z"
+  }
+]
