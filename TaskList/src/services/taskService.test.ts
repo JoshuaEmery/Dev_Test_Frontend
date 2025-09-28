@@ -1,5 +1,7 @@
-import { TaskJSONService } from './taskJSONService';
 import { type ITaskService, type CreateTaskInput, type UpdateTaskInput } from './types';
+//rely on the container to get the task service
+import { getTaskService, reinitializeServices } from '../container/container';
+
 
 // Mock the sample data to have predictable test data
 jest.mock('../data/sample_tasks_data.json', () => [
@@ -27,12 +29,14 @@ jest.mock('../data/sample_tasks_data.json', () => [
   }
 ]);
 
-describe('TaskService (TaskJSONService Implementation)', () => {
+describe('TaskService (via DI Container - TaskJSONService Implementation)', () => {
   let taskService: ITaskService;
 
   beforeEach(() => {
+    // Reinitialize services to ensure fresh instances for each test
+    reinitializeServices();
     // Create a fresh instance for each test to ensure isolation
-    taskService = new TaskJSONService();
+    taskService = getTaskService();
   });
 
   describe('getTasks', () => {
