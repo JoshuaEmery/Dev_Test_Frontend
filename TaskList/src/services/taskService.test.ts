@@ -1,6 +1,6 @@
 import { type ITaskService, type CreateTaskInput, type UpdateTaskInput } from './types';
 //rely on the container to get the task service
-import { getTaskService, reinitializeServices } from '../container/container';
+import { getTaskService, TypeDIContainer } from '../container/typediContainer';
 
 
 // Mock the sample data to have predictable test data
@@ -34,7 +34,7 @@ describe('TaskService (via DI Container - TaskJSONService Implementation)', () =
 
   beforeEach(() => {
     // Reinitialize services to ensure fresh instances for each test
-    reinitializeServices();
+    TypeDIContainer.reinitialize();
     // Create a fresh instance for each test to ensure isolation
     taskService = getTaskService();
   });

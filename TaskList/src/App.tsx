@@ -1,11 +1,11 @@
 import JestTest from './components/JestTest/JestTest'
-import { TaskJSONService } from './services/taskJSONService'
+import { getTaskService } from './container/typediContainer'
 import { useState, useEffect } from 'react'
 import { type Task } from './services/types'
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const taskService = new TaskJSONService();
+  const taskService = getTaskService();
   useEffect(() => {
     taskService.getTasks().then(setTasks);
   }, []);
