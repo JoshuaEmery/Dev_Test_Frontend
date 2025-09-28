@@ -16,6 +16,10 @@
     "jsx": "react-jsx",
     "resolveJsonModule": true,
 
+    /* Decorators */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
