@@ -1,0 +1,18 @@
+Purpose: Global State Management Container
+// TaskContext.tsx - Global state provider
+
+Provides tasks array and CRUD operations to app
+Manages loading/error states globally
+Uses useReducer for complex state updates
+Wraps service calls with error handling
+Should NOT contain business logic
+Provides context value to component tree
+Handles state persistence (localStorage, etc.)
+Manages optimistic updates coordination
+
+// types.ts - Context-specific types
+
+Context state interface
+Action types for useReducer
+Context provider props
+State shape definitions

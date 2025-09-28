@@ -1,0 +1,17 @@
+
+Purpose: Global Type Definitions
+// index.ts - Core domain types
+
+Task interface and related types
+User interface and authentication types
+Shared enums and constants
+Core business domain models
+Common utility types
+
+// api.ts - API-specific types
+
+Request/response wrapper interfaces
+Error response types
+Pagination types
+API endpoint types
+HTTP status types

@@ -1,0 +1,19 @@
+Purpose: External Data Operations Layer If a function does not connect to external system it goes in /utils
+// taskService.ts - External Data operations
+
+API calls (GET, POST, PUT, DELETE)
+Data transformation between API and app formats
+Error handling for network requests
+No React dependencies, pure functions
+Return promises/async operations
+HTTP client configuration
+Request/response interceptors
+Data serialization/deserialization
+
+// types.ts - Service-specific types
+
+API request/response interfaces
+Service configuration types
+HTTP error types
+Pagination parameters
+Filter/sort parameters

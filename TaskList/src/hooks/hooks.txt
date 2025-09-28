@@ -1,0 +1,19 @@
+HOOKS FOLDER - /src/hooks/
+Purpose: Business Logic Orchestration Layer
+// useTasks.ts - Business logic and state orchestration
+
+Custom hook that consumes TaskContext
+Implements business rules (validation, filtering, sorting)
+Handles optimistic updates
+Manages derived state (filtered lists, counts, totals)
+Exposes clean API to components
+Handles complex state calculations
+Implements caching strategies
+Manages data synchronization
+
+// types.ts - Hook interfaces
+
+Hook return types and parameters
+Business logic types
+Derived state types
+Hook configuration options

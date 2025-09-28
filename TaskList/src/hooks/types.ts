@@ -1,1 +1,1 @@
-// Hook-specific types
+// Hook-specific types for task management
