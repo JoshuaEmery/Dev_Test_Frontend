@@ -147,6 +147,18 @@ function taskReducer(
         lastUpdated: Date.now(),
       };
 
+    // Replace optimistic task with real task from server
+    case 'REPLACE_OPTIMISTIC_TASK':
+      return {
+        ...state,
+        tasks: state.tasks.map((task) =>
+          task.id === action.payload.tempId ? action.payload.realTask : task
+        ),
+        loading: false,
+        error: null,
+        lastUpdated: Date.now(),
+      };
+
     default:
       return state;
   }
@@ -221,8 +233,11 @@ export function TaskProvider({
         // Make actual API call
         const newTask = await serviceRef.current.createTask(data);
 
-        // Replace optimistic task with real task
-        dispatch({ type: 'UPDATE_TASK', payload: newTask });
+        // Replace optimistic task with real task using tempId
+        dispatch({
+          type: 'REPLACE_OPTIMISTIC_TASK',
+          payload: { tempId, realTask: newTask },
+        });
         return newTask;
       } catch (error) {
         // Revert optimistic update on error

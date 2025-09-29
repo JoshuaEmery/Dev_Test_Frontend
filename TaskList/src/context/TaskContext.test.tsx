@@ -218,12 +218,10 @@ describe('TaskContext', () => {
       });
 
       expect(createdTask!).toEqual(mockNewTask);
-      // Note: Due to current implementation, the optimistic task remains in the array
-      // but the real task is not added because UPDATE_TASK doesn't find the optimistic task to replace
-      // (optimistic task has negative ID, real task has positive ID)
+      // The optimistic task should be replaced with the real task from the server
       expect(result.current.tasks).toHaveLength(1);
       expect(result.current.tasks[0].title).toBe('New Task');
-      expect(result.current.tasks[0].id).toBeLessThan(0); // Should be the optimistic task with negative ID
+      expect(result.current.tasks[0].id).toBe(mockNewTask.id); // Should be the real task with positive ID
       expect(result.current.loading).toBe(false);
       expect(result.current.error).toBeNull();
     });
