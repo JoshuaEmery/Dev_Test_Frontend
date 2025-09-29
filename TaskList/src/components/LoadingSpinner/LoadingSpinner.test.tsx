@@ -4,5 +4,5 @@ import LoadingSpinner from './LoadingSpinner';
 
 test('renders the component with initial content', () => {
   render(<LoadingSpinner />);
-  expect(screen.getByText(/LoadingSpinner/i)).toBeInTheDocument();
+  expect(screen.getByText(/Loading Tasks/i)).toBeInTheDocument();
 });

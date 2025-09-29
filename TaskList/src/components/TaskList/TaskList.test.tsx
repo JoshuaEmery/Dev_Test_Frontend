@@ -9,5 +9,5 @@ test('renders the component with initial content', () => {
       <TaskList />
     </TaskProvider>
   );
-  expect(screen.getByText(/LoadingSpinner/i)).toBeInTheDocument();
+  expect(screen.getByText(/Loading Tasks/i)).toBeInTheDocument();
 });
