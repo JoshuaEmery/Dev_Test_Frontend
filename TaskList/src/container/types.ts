@@ -18,6 +18,6 @@ export const SERVICE_TYPES = {
 } as const;
 
 // Configuration interface for the container
-export interface ContainerConfig {
+export interface IContainerConfig {
   serviceType: ServiceType;
 }

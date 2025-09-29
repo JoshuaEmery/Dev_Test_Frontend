@@ -1,14 +1,16 @@
+//This component was just used to verify the testing library was working
+//It is not used in the application
 import React, { useState } from 'react';
 
 const JestTest: React.FC = () => {
   const [count, setCount] = useState(0);
 
   const increment = () => {
-    setCount(prevCount => prevCount + 1);
+    setCount((prevCount) => prevCount + 1);
   };
 
   const decrement = () => {
-    setCount(prevCount => prevCount - 1);
+    setCount((prevCount) => prevCount - 1);
   };
 
   const reset = () => {

@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import { useTasks, type UpdateTaskInput } from '../../hooks/useTasks';
-import { type Task } from '../../services/types';
-import { 
-  CheckCircle2, 
-  Circle, 
-  Edit3, 
-  Trash2, 
-  Save, 
-  X, 
+import {
+  CheckCircle2,
+  Circle,
+  Edit3,
+  Trash2,
+  Save,
+  X,
   Calendar,
-  Clock
+  Clock,
 } from 'lucide-react';
+import { type ITaskItemProps } from './types';
 
-interface TaskItemProps {
-  task: Task;
-}
-
-const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+const TaskItem: React.FC<ITaskItemProps> = ({ task }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
-  const [editDescription, setEditDescription] = useState(task.description || '');
+  const [editDescription, setEditDescription] = useState(
+    task.description || ''
+  );
   const { updateTask, deleteTask, loading } = useTasks();
 
   const handleToggleComplete = async () => {
@@ -75,9 +73,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   };
 
   return (
-    <div className={`group bg-white border border-gray-200 rounded-xl p-6 transition-all duration-200 hover:shadow-lg hover:border-gray-300 ${
-      task.completed ? 'opacity-75' : ''
-    }`}>
+    <div
+      className={`group bg-white border border-gray-200 rounded-xl p-6 transition-all duration-200 hover:shadow-lg hover:border-gray-300 ${
+        task.completed ? 'opacity-75' : ''
+      }`}
+    >
       {isEditing ? (
         <div className="space-y-4">
           <div className="space-y-2">
@@ -97,16 +97,16 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
             />
           </div>
           <div className="flex gap-3 justify-end">
-            <button 
-              onClick={handleCancel} 
+            <button
+              onClick={handleCancel}
               disabled={loading}
               className="px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 disabled:opacity-50"
             >
               <X className="w-4 h-4" />
               Cancel
             </button>
-            <button 
-              onClick={handleSave} 
+            <button
+              onClick={handleSave}
               disabled={loading || !editTitle.trim()}
               className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -122,7 +122,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
             onClick={handleToggleComplete}
             disabled={loading}
             className={`mt-1 transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed ${
-              task.completed ? 'text-green-500' : 'text-gray-400 hover:text-green-500'
+              task.completed
+                ? 'text-green-500'
+                : 'text-gray-400 hover:text-green-500'
             }`}
           >
             {task.completed ? (
@@ -136,18 +138,22 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
-                <h3 className={`text-lg font-semibold mb-2 transition-all duration-200 ${
-                  task.completed 
-                    ? 'line-through text-gray-500' 
-                    : 'text-gray-800'
-                }`}>
+                <h3
+                  className={`text-lg font-semibold mb-2 transition-all duration-200 ${
+                    task.completed
+                      ? 'line-through text-gray-500'
+                      : 'text-gray-800'
+                  }`}
+                >
                   {task.title}
                 </h3>
-                
+
                 {task.description && (
-                  <p className={`text-gray-600 mb-3 leading-relaxed ${
-                    task.completed ? 'line-through' : ''
-                  }`}>
+                  <p
+                    className={`text-gray-600 mb-3 leading-relaxed ${
+                      task.completed ? 'line-through' : ''
+                    }`}
+                  >
                     {task.description}
                   </p>
                 )}
@@ -168,11 +174,13 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
               </div>
 
               {/* Status Badge */}
-              <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                task.completed 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-yellow-100 text-yellow-800'
-              }`}>
+              <div
+                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  task.completed
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-yellow-100 text-yellow-800'
+                }`}
+              >
                 {task.completed ? 'Completed' : 'Pending'}
               </div>
             </div>

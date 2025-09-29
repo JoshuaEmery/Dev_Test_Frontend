@@ -30,7 +30,7 @@ The `TaskContext` is the internal state management engine for task operations. I
 ```typescript
 // 1. User fills out form and clicks submit
 const handleSubmit = () => {
-  createTask({ title: "Buy groceries" });
+  createTask({ title: 'Buy groceries' });
 };
 
 // 2. createTask function runs:
@@ -113,15 +113,15 @@ The context uses a reducer pattern for predictable state updates:
 
 ```typescript
 // State shape
-interface TaskContextState {
-  tasks: Task[];           // Array of all tasks
-  loading: boolean;        // Whether async operation is in progress
-  error: string | null;    // Current error message
+interface ITaskContextState {
+  tasks: Task[]; // Array of all tasks
+  loading: boolean; // Whether async operation is in progress
+  error: string | null; // Current error message
   lastUpdated: number | null; // Timestamp of last state change
 }
 
 // Action types
-type TaskAction = 
+type TaskAction =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'SET_TASKS'; payload: Task[] }
@@ -151,14 +151,15 @@ try {
 } catch (error) {
   // 2. Context catches error and reverts optimistic update
   dispatch({ type: 'REVERT_OPTIMISTIC_ADD', payload: tempId });
-  
+
   // 3. Sets error message
-  const errorMessage = error instanceof Error ? error.message : 'Failed to create task';
+  const errorMessage =
+    error instanceof Error ? error.message : 'Failed to create task';
   dispatch({ type: 'SET_ERROR', payload: errorMessage });
-  
+
   // 4. Stops loading state
   // (handled automatically by SET_ERROR action)
-  
+
   // 5. Re-throws error for component to handle
   throw error;
 }
@@ -188,21 +189,24 @@ const createTask = useCallback(async (data: CreateTaskInput): Promise<Task> => {
   // ... implementation
 }, []); // Empty dependency array since service is stable
 
-const updateTask = useCallback(async (id: number, data: UpdateTaskInput): Promise<Task> => {
-  // ... implementation
-}, [state.tasks]); // Depends on tasks for optimistic updates
+const updateTask = useCallback(
+  async (id: number, data: UpdateTaskInput): Promise<Task> => {
+    // ... implementation
+  },
+  [state.tasks]
+); // Depends on tasks for optimistic updates
 ```
 
 ### Memoized Context Value
 
 ```typescript
 // Context value is recreated only when state or actions change
-const contextValue: TaskContextValue = {
+const contextValue: ITaskContextValue = {
   // State
   tasks: state.tasks,
   loading: state.loading,
   error: state.error,
-  
+
   // Actions (memoized with useCallback)
   getTasks,
   getTask,
@@ -251,17 +255,19 @@ const tempId = Date.now() * -1; // e.g., -1703123456789
 ## Integration Points
 
 ### With Components
+
 - Components use `useTasks()` hook (public API)
 - `useTasks()` internally calls `useTaskContext()` (private)
 - Context provides state and actions to components
 
 ### With Services
+
 - Context uses TypeDI container to get service instance
 - Service interface is abstracted via `ITaskService`
 - Easy to swap between JSON and API implementations
 
 ### With Testing
+
 - Context can be wrapped in `TaskProvider` for testing
 - Service can be mocked via TypeDI container
 - State can be inspected and manipulated in tests
-

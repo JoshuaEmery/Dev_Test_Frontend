@@ -1,8 +1,12 @@
 // Context-specific types for task management
-import { type Task, type CreateTaskInput, type UpdateTaskInput } from '../services/types';
+import {
+  type Task,
+  type CreateTaskInput,
+  type UpdateTaskInput,
+} from '../services/types';
 
 // Context state interface
-export interface TaskContextState {
+export interface ITaskContextState {
   tasks: Task[];
   loading: boolean;
   error: string | null;
@@ -28,12 +32,12 @@ export type TaskAction =
   | { type: 'REVERT_OPTIMISTIC_REMOVE'; payload: Task };
 
 // Context value interface
-export interface TaskContextValue {
+export interface ITaskContextValue {
   // State
   tasks: Task[];
   loading: boolean;
   error: string | null;
-  
+
   // Actions
   getTasks: () => Promise<void>;
   getTask: (id: number) => Promise<Task | null>;
@@ -45,6 +49,6 @@ export interface TaskContextValue {
 }
 
 // Provider props interface
-export interface TaskProviderProps {
+export interface ITaskProviderProps {
   children: React.ReactNode;
 }

@@ -1,11 +1,26 @@
 // Task context provider for state management
-import { createContext, useContext, useReducer, useCallback, useRef } from 'react';
-import { type TaskContextState, type TaskAction, type TaskContextValue, type TaskProviderProps } from './types';
-import { type Task, type CreateTaskInput, type UpdateTaskInput } from '../services/types';
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useCallback,
+  useRef,
+} from 'react';
+import {
+  type ITaskContextState,
+  type TaskAction,
+  type ITaskContextValue,
+  type ITaskProviderProps,
+} from './types';
+import {
+  type Task,
+  type CreateTaskInput,
+  type UpdateTaskInput,
+} from '../services/types';
 import { getTaskService } from '../container/typediContainer';
 
 // Initial state for the context
-const initialState: TaskContextState = {
+const initialState: ITaskContextState = {
   tasks: [],
   loading: false,
   error: null,
@@ -14,7 +29,10 @@ const initialState: TaskContextState = {
 
 //This is a function that takes in the current state and an action to be performs.
 //It returns a new state based on the action. This is provided to the useReducer hook.
-function taskReducer(state: TaskContextState, action: TaskAction): TaskContextState {
+function taskReducer(
+  state: ITaskContextState,
+  action: TaskAction
+): ITaskContextState {
   switch (action.type) {
     case 'SET_LOADING':
       return {
@@ -52,7 +70,7 @@ function taskReducer(state: TaskContextState, action: TaskAction): TaskContextSt
     case 'UPDATE_TASK':
       return {
         ...state,
-        tasks: state.tasks.map(task =>
+        tasks: state.tasks.map((task) =>
           task.id === action.payload.id ? action.payload : task
         ),
         loading: false,
@@ -63,7 +81,7 @@ function taskReducer(state: TaskContextState, action: TaskAction): TaskContextSt
     case 'REMOVE_TASK':
       return {
         ...state,
-        tasks: state.tasks.filter(task => task.id !== action.payload),
+        tasks: state.tasks.filter((task) => task.id !== action.payload),
         loading: false,
         error: null,
         lastUpdated: Date.now(),
@@ -91,7 +109,7 @@ function taskReducer(state: TaskContextState, action: TaskAction): TaskContextSt
     case 'OPTIMISTIC_UPDATE_TASK':
       return {
         ...state,
-        tasks: state.tasks.map(task =>
+        tasks: state.tasks.map((task) =>
           task.id === action.payload.id ? action.payload : task
         ),
         lastUpdated: Date.now(),
@@ -100,7 +118,7 @@ function taskReducer(state: TaskContextState, action: TaskAction): TaskContextSt
     case 'OPTIMISTIC_REMOVE_TASK':
       return {
         ...state,
-        tasks: state.tasks.filter(task => task.id !== action.payload),
+        tasks: state.tasks.filter((task) => task.id !== action.payload),
         lastUpdated: Date.now(),
       };
 
@@ -109,14 +127,14 @@ function taskReducer(state: TaskContextState, action: TaskAction): TaskContextSt
     case 'REVERT_OPTIMISTIC_ADD':
       return {
         ...state,
-        tasks: state.tasks.filter(task => task.id !== action.payload),
+        tasks: state.tasks.filter((task) => task.id !== action.payload),
         lastUpdated: Date.now(),
       };
 
     case 'REVERT_OPTIMISTIC_UPDATE':
       return {
         ...state,
-        tasks: state.tasks.map(task =>
+        tasks: state.tasks.map((task) =>
           task.id === action.payload.id ? action.payload : task
         ),
         lastUpdated: Date.now(),
@@ -135,10 +153,10 @@ function taskReducer(state: TaskContextState, action: TaskAction): TaskContextSt
 }
 
 // Create the context (private - not exported)
-const TaskContext = createContext<TaskContextValue | undefined>(undefined);
+const TaskContext = createContext<ITaskContextValue | undefined>(undefined);
 
 // Custom hook to use the task context (private - not exported)
-function useTaskContext(): TaskContextValue {
+function useTaskContext(): ITaskContextValue {
   const context = useContext(TaskContext);
   if (context === undefined) {
     throw new Error('useTaskContext must be used within a TaskProvider');
@@ -148,8 +166,10 @@ function useTaskContext(): TaskContextValue {
 
 // TaskProvider component - This will expose the context to the UI
 // We will wrap children components in this provider.
-export function TaskProvider({ children }: TaskProviderProps): React.ReactElement {
-    //useReducer with intial state and the reducer function
+export function TaskProvider({
+  children,
+}: ITaskProviderProps): React.ReactElement {
+  //useReducer with intial state and the reducer function
   const [state, dispatch] = useReducer(taskReducer, initialState);
   //create a service using ref. This is used to avoid re-creating the service on every render.
   const serviceRef = useRef(getTaskService());
@@ -162,7 +182,8 @@ export function TaskProvider({ children }: TaskProviderProps): React.ReactElemen
       const tasks = await serviceRef.current.getTasks();
       dispatch({ type: 'SET_TASKS', payload: tasks });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch tasks';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to fetch tasks';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
     }
   }, []);
@@ -174,98 +195,111 @@ export function TaskProvider({ children }: TaskProviderProps): React.ReactElemen
       dispatch({ type: 'SET_LOADING', payload: false });
       return task;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch task';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to fetch task';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
       return null;
     }
   }, []);
 
-  const createTask = useCallback(async (data: CreateTaskInput): Promise<Task> => {
-    // Generate temporary ID for optimistic update
-    const tempId = Date.now() * -1; // Negative ID to avoid conflicts
-    const optimisticTask: Task = {
-      id: tempId,
-      title: data.title,
-      description: data.description || null,
-      completed: false,
-      createdAt: new Date().toISOString(),
-    };
+  const createTask = useCallback(
+    async (data: CreateTaskInput): Promise<Task> => {
+      // Generate temporary ID for optimistic update
+      const tempId = Date.now() * -1; // Negative ID to avoid conflicts
+      const optimisticTask: Task = {
+        id: tempId,
+        title: data.title,
+        description: data.description || null,
+        completed: false,
+        createdAt: new Date().toISOString(),
+      };
 
-    try {
-      // Optimistic update - show task immediately
-      dispatch({ type: 'OPTIMISTIC_ADD_TASK', payload: optimisticTask });
-      
-      // Make actual API call
-      const newTask = await serviceRef.current.createTask(data);
-      
-      // Replace optimistic task with real task
-      dispatch({ type: 'UPDATE_TASK', payload: newTask });
-      return newTask;
-    } catch (error) {
-      // Revert optimistic update on error
-      dispatch({ type: 'REVERT_OPTIMISTIC_ADD', payload: tempId });
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create task';
-      dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      throw error; // Re-throw to allow component to handle
-    }
-  }, []);
+      try {
+        // Optimistic update - show task immediately
+        dispatch({ type: 'OPTIMISTIC_ADD_TASK', payload: optimisticTask });
 
-  const updateTask = useCallback(async (id: number, data: UpdateTaskInput): Promise<Task> => {
-    // Find the current task for optimistic update
-    const currentTask = state.tasks.find(task => task.id === id);
-    if (!currentTask) {
-      throw new Error('Task not found');
-    }
+        // Make actual API call
+        const newTask = await serviceRef.current.createTask(data);
 
-    // Create optimistic update
-    const optimisticTask: Task = {
-      ...currentTask,
-      ...data,
-      updatedAt: new Date().toISOString(),
-    };
+        // Replace optimistic task with real task
+        dispatch({ type: 'UPDATE_TASK', payload: newTask });
+        return newTask;
+      } catch (error) {
+        // Revert optimistic update on error
+        dispatch({ type: 'REVERT_OPTIMISTIC_ADD', payload: tempId });
+        const errorMessage =
+          error instanceof Error ? error.message : 'Failed to create task';
+        dispatch({ type: 'SET_ERROR', payload: errorMessage });
+        throw error; // Re-throw to allow component to handle
+      }
+    },
+    []
+  );
 
-    try {
-      // Optimistic update - show changes immediately
-      dispatch({ type: 'OPTIMISTIC_UPDATE_TASK', payload: optimisticTask });
-      
-      // Make actual API call
-      const updatedTask = await serviceRef.current.updateTask(id, data);
-      
-      // Replace optimistic task with real task
-      dispatch({ type: 'UPDATE_TASK', payload: updatedTask });
-      return updatedTask;
-    } catch (error) {
-      // Revert optimistic update on error
-      dispatch({ type: 'REVERT_OPTIMISTIC_UPDATE', payload: currentTask });
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update task';
-      dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      throw error; // Re-throw to allow component to handle
-    }
-  }, [state.tasks]);
+  const updateTask = useCallback(
+    async (id: number, data: UpdateTaskInput): Promise<Task> => {
+      // Find the current task for optimistic update
+      const currentTask = state.tasks.find((task) => task.id === id);
+      if (!currentTask) {
+        throw new Error('Task not found');
+      }
 
-  const deleteTask = useCallback(async (id: number): Promise<void> => {
-    // Find the current task for optimistic update
-    const currentTask = state.tasks.find(task => task.id === id);
-    if (!currentTask) {
-      throw new Error('Task not found');
-    }
+      // Create optimistic update
+      const optimisticTask: Task = {
+        ...currentTask,
+        ...data,
+        updatedAt: new Date().toISOString(),
+      };
 
-    try {
-      // Optimistic update - remove task immediately
-      dispatch({ type: 'OPTIMISTIC_REMOVE_TASK', payload: id });
-      
-      // Make actual API call
-      await serviceRef.current.deleteTask(id);
-      
-      // Confirm removal (no additional action needed)
-    } catch (error) {
-      // Revert optimistic update on error
-      dispatch({ type: 'REVERT_OPTIMISTIC_REMOVE', payload: currentTask });
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete task';
-      dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      throw error; // Re-throw to allow component to handle
-    }
-  }, [state.tasks]);
+      try {
+        // Optimistic update - show changes immediately
+        dispatch({ type: 'OPTIMISTIC_UPDATE_TASK', payload: optimisticTask });
+
+        // Make actual API call
+        const updatedTask = await serviceRef.current.updateTask(id, data);
+
+        // Replace optimistic task with real task
+        dispatch({ type: 'UPDATE_TASK', payload: updatedTask });
+        return updatedTask;
+      } catch (error) {
+        // Revert optimistic update on error
+        dispatch({ type: 'REVERT_OPTIMISTIC_UPDATE', payload: currentTask });
+        const errorMessage =
+          error instanceof Error ? error.message : 'Failed to update task';
+        dispatch({ type: 'SET_ERROR', payload: errorMessage });
+        throw error; // Re-throw to allow component to handle
+      }
+    },
+    [state.tasks]
+  );
+
+  const deleteTask = useCallback(
+    async (id: number): Promise<void> => {
+      // Find the current task for optimistic update
+      const currentTask = state.tasks.find((task) => task.id === id);
+      if (!currentTask) {
+        throw new Error('Task not found');
+      }
+
+      try {
+        // Optimistic update - remove task immediately
+        dispatch({ type: 'OPTIMISTIC_REMOVE_TASK', payload: id });
+
+        // Make actual API call
+        await serviceRef.current.deleteTask(id);
+
+        // Confirm removal (no additional action needed)
+      } catch (error) {
+        // Revert optimistic update on error
+        dispatch({ type: 'REVERT_OPTIMISTIC_REMOVE', payload: currentTask });
+        const errorMessage =
+          error instanceof Error ? error.message : 'Failed to delete task';
+        dispatch({ type: 'SET_ERROR', payload: errorMessage });
+        throw error; // Re-throw to allow component to handle
+      }
+    },
+    [state.tasks]
+  );
 
   const clearError = useCallback((): void => {
     dispatch({ type: 'CLEAR_ERROR' });
@@ -276,12 +310,12 @@ export function TaskProvider({ children }: TaskProviderProps): React.ReactElemen
   }, [getTasks]);
 
   // Context value object
-  const contextValue: TaskContextValue = {
+  const contextValue: ITaskContextValue = {
     // State
     tasks: state.tasks,
     loading: state.loading,
     error: state.error,
-    
+
     // Actions
     getTasks,
     getTask,
@@ -293,9 +327,7 @@ export function TaskProvider({ children }: TaskProviderProps): React.ReactElemen
   };
 
   return (
-    <TaskContext.Provider value={contextValue}>
-      {children}
-    </TaskContext.Provider>
+    <TaskContext.Provider value={contextValue}>{children}</TaskContext.Provider>
   );
 }
 

@@ -1,18 +1,18 @@
-import React from 'react';
 import { AlertTriangle, RefreshCw, X } from 'lucide-react';
 
-interface ErrorMessageProps {
+interface IErrorMessageProps {
   title?: string;
   message: string;
+  //callback functions
   onRetry?: () => void;
   onDismiss?: () => void;
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ 
-  title = "Error", 
-  message, 
-  onRetry, 
-  onDismiss 
+const ErrorMessage: React.FC<IErrorMessageProps> = ({
+  title = 'Error',
+  message,
+  onRetry,
+  onDismiss,
 }) => {
   return (
     <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
@@ -26,8 +26,8 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({
           {(onRetry || onDismiss) && (
             <div className="flex gap-3">
               {onRetry && (
-                <button 
-                  onClick={onRetry} 
+                <button
+                  onClick={onRetry}
                   className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
                 >
                   <RefreshCw className="w-4 h-4" />
@@ -35,8 +35,8 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({
                 </button>
               )}
               {onDismiss && (
-                <button 
-                  onClick={onDismiss} 
+                <button
+                  onClick={onDismiss}
                   className="bg-gray-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-600 transition-colors duration-200 flex items-center gap-2"
                 >
                   <X className="w-4 h-4" />

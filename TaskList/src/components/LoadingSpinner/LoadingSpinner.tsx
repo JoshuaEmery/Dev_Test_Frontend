@@ -1,12 +1,9 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
+import { type ILoadingSpinnerProps } from './types';
 
-interface LoadingSpinnerProps {
-  message?: string;
-}
-
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  message = "Loading..." 
+const LoadingSpinner: React.FC<ILoadingSpinnerProps> = ({
+  message = 'Loading...',
 }) => {
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
@@ -18,7 +15,9 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
           </div>
         </div>
         <div className="mt-6 text-center">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">Loading Tasks</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            Loading Tasks
+          </h3>
           <p className="text-gray-500 text-sm">{message}</p>
         </div>
       </div>
