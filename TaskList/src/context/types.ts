@@ -30,11 +30,8 @@ export type TaskAction =
   | { type: 'REVERT_OPTIMISTIC_ADD'; payload: number }
   | { type: 'REVERT_OPTIMISTIC_UPDATE'; payload: Task }
   | { type: 'REVERT_OPTIMISTIC_REMOVE'; payload: Task }
-  // Replace optimistic task with real task (for successful API calls)
-  | {
-      type: 'REPLACE_OPTIMISTIC_TASK';
-      payload: { tempId: number; realTask: Task };
-    };
+  // Replace optimistic task with real task (for create operations)
+  | { type: 'REPLACE_OPTIMISTIC_TASK'; payload: { tempId: number; realTask: Task } };
 
 // Context value interface
 export interface ITaskContextValue {

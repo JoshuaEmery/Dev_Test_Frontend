@@ -21,13 +21,27 @@ const TaskItem: React.FC<ITaskItemProps> = ({ task }) => {
   const { updateTask, deleteTask, loading } = useTasks();
 
   const handleToggleComplete = async () => {
+    console.log('🔄 Toggle complete clicked for task:', {
+      taskId: task.id,
+      currentStatus: task.completed,
+      newStatus: !task.completed,
+      taskTitle: task.title
+    });
+    
     try {
       const updateData: UpdateTaskInput = {
+        title: task.title,
+        description: task.description || undefined,
         completed: !task.completed,
       };
+      
+      console.log('📤 Sending full task data:', updateData);
+      
       await updateTask(task.id, updateData);
+      
+      console.log('✅ Task update successful');
     } catch (error) {
-      console.error('Failed to update task:', error);
+      console.error('❌ Failed to update task:', error);
     }
   };
 
@@ -44,11 +58,17 @@ const TaskItem: React.FC<ITaskItemProps> = ({ task }) => {
       const updateData: UpdateTaskInput = {
         title: editTitle.trim(),
         description: editDescription.trim() || undefined,
+        completed: task.completed, // Include current completion status
       };
+      
+      console.log('📝 Saving edited task with full data:', updateData);
+      
       await updateTask(task.id, updateData);
       setIsEditing(false);
+      
+      console.log('✅ Task edit saved successfully');
     } catch (error) {
-      console.error('Failed to update task:', error);
+      console.error('❌ Failed to save task edit:', error);
     }
   };
 

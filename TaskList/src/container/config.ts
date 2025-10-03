@@ -9,7 +9,7 @@ import {
 
 export const config: IContainerConfig = {
   // Change this to switch between JSON and API service implementations
-  serviceType: SERVICE_TYPES.JSON,
+  serviceType: SERVICE_TYPES.API,
 };
 
 // Re-export types and constants for external use

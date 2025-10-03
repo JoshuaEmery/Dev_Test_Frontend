@@ -234,10 +234,18 @@ export function TaskProvider({
         const newTask = await serviceRef.current.createTask(data);
 
         // Replace optimistic task with real task using tempId
+        console.log('🔄 Replacing optimistic task:', {
+          tempId,
+          realTaskId: newTask.id,
+          realTaskTitle: newTask.title
+        });
+
         dispatch({
           type: 'REPLACE_OPTIMISTIC_TASK',
           payload: { tempId, realTask: newTask },
         });
+
+        console.log('✅ Optimistic task replaced with real task successfully');
         return newTask;
       } catch (error) {
         // Revert optimistic update on error
