@@ -1,6 +1,11 @@
 # Frontend Dev Test: To do list app
 
+## https://witty-sand-09db3fe0f.1.azurestaticapps.net/
+
+- Allow time for the API to cold start when initially launching this paage. It will likely take at least one refresh to get a response from the API, just deploying as cheaply as possible while in prod.
+
 Project is build with React, TypeScript, and Vite. Package management via pnpm, testing via Jest.
+
 
 ## 🚀 Quick Start
 
@@ -90,7 +95,7 @@ The application uses React's `useReducer` hook for complex state management, pro
 
 ### Optimistic Updates
 
-The application implements optimistic updates for a responsive user experience. If we do not need this level of responsiveness, this is far from necessary. Just something to consider. Essentially what happens is that the UI is updated immediately with the new data before the API call is made. If the API call is successful, the UI is updated with the real data. If the API call is unsuccessful, the UI is updated with the reverted data.
+The application implements optimistic updates for a responsive user experience. If we do not need this level of responsiveness, this is far from necessary. Just something to consider. Essentially what happens is that the UI is updated immediately with the new data before the API call is made. If the API call is successful, the UI is updated with the real data. If the API call is unsuccessful, the UI is updated with the reverted data. If we did go forward with the feature in prod I would likely use a library such as Tanstack.
 
 ```typescript
 // Example: Creating a task
@@ -204,22 +209,6 @@ User Interaction
 6. **Data Update**: Service returns data, context updates state
 7. **UI Re-render**: Components re-render with new state
 
-## 🎯 Key Features
-
-### Task Management
-
-- ✅ Create new tasks with title and description
-- ✅ Mark tasks as complete/incomplete
-- ✅ Edit task details inline
-- ✅ Delete tasks with confirmation
-- ✅ Real-time progress tracking
-
-### Developer Experience
-
-- 🔧 **TypeScript**:
-- 🧪 **Testing**: **Tests implemented but are far from comprehensive. Needs more work.**
-- 📦 **Dependency Injection**: Easy service swapping
-
 ## 🧪 Testing
 
 ```bash
@@ -242,45 +231,8 @@ pnpm test
 - **Props interfaces**: Define props in separate `types.ts` files
 - **Default exports**: Use default exports for components
 - **Consistent naming**: PascalCase for components, camelCase for functions
-
-### File Organization
-
-- **Co-location**: Related files grouped in directories
 - **Consistent structure**: Same pattern across all modules
-
-### Code Style
-
-- **Functional components**: Use function declarations
-- **Hooks at top**: Custom hooks called at component start
-
-## 🔧 Configuration
-
-### Service Configuration
-
-API Service is not implemented yet however will be easy switch based on the config and the service Interface.
-Switch between JSON and API services in `/src/container/config.ts`:
-
-```typescript
-export const config: IContainerConfig = {
-  serviceType: SERVICE_TYPES.JSON, // or SERVICE_TYPES.API
-};
-```
-
-### Build Configuration
-
-- **Vite**: Fast development and building
-- **TypeScript**: Strict type checking
-- **Tailwind CSS**: Utility-first styling
-- **ESLint**: Code quality enforcement
 
 ## 🚀 Deployment
 
-The application builds to static files suitable for any static hosting:
-
-```bash
-pnpm run build
-```
-
-Output will be in the `dist/` directory, ready for deployment to:
-
-- Any static hosting service
+The application uses Github Actions to deploy to Azure Static Web App on push to the repository.
