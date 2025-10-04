@@ -1,23 +1,18 @@
 // Service that communicates with the API using axios
 import axios, { type AxiosResponse } from 'axios';
-import { type ITaskService, type Task, type CreateTaskInput, type UpdateTaskInput } from './types';
-
-// API response types based on the actual endpoint responses
-interface ApiResponse {
-  message?: string;
-  error?: string;
-}
-
-interface TasksResponse extends ApiResponse {
-  tasks: Task[];
-}
-
-interface TaskResponse extends ApiResponse {
-  task: Task;
-}
+import { 
+  type ITaskService, 
+  type Task, 
+  type CreateTaskInput, 
+  type UpdateTaskInput,
+  type TasksResponse,
+  type TaskResponse,
+  type DeleteResponse
+} from './types';
 
 export class TaskService implements ITaskService {
-  private readonly baseURL = 'https://taskapi-app.calmtree-a2764f0e.eastus.azurecontainerapps.io';
+  //private readonly baseURL = 'https://taskapi-app.calmtree-a2764f0e.eastus.azurecontainerapps.io';
+  private readonly baseURL = 'http://localhost:5001';
   // Get all tasks
   async getTasks(): Promise<Task[]> {
     const url = `${this.baseURL}/tasks`;
@@ -29,11 +24,17 @@ export class TaskService implements ITaskService {
       console.log(`[TaskService] Successfully fetched tasks:`, {
         status: response.status,
         statusText: response.statusText,
-        dataLength: response.data?.tasks?.length || 0,
+        success: response.data?.success,
+        dataLength: response.data?.data?.length || 0,
         message: response.data?.message
       });
       
-      return response.data.tasks;
+      // Handle the new standardized response format
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Failed to fetch tasks');
+      }
+      
+      return response.data.data;
     } catch (error) {
       console.error(`[TaskService] Error fetching tasks from ${url}:`, {
         error: error,
@@ -59,7 +60,13 @@ export class TaskService implements ITaskService {
   async getTask(id: number): Promise<Task | null> {
     try {
       const response: AxiosResponse<TaskResponse> = await axios.get(`${this.baseURL}/tasks/${id}`);
-      return response.data.task;
+      
+      // Handle the new standardized response format
+      if (!response.data.success) {
+        throw new Error(response.data.message || `Failed to fetch task ${id}`);
+      }
+      
+      return response.data.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 404 || error.response?.data?.error === 'Task not found') {
@@ -83,8 +90,13 @@ export class TaskService implements ITaskService {
         },
       });
       
-      // The API returns { message: "Task created successfully", task: {...} }
-      return response.data.task;
+      // Handle the new standardized response format
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Failed to create task');
+      }
+      
+      // The API returns { success: true, data: {...}, message: "Task created successfully" }
+      return response.data.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data?.error) {
         throw new Error(error.response.data.error);
@@ -103,8 +115,13 @@ export class TaskService implements ITaskService {
         },
       });
       
-      // The API returns { message: "Task updated successfully", task: {...} }
-      return response.data.task;
+      // Handle the new standardized response format
+      if (!response.data.success) {
+        throw new Error(response.data.message || `Failed to update task ${id}`);
+      }
+      
+      // The API returns { success: true, data: {...}, message: "Task updated successfully" }
+      return response.data.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 404 || error.response?.data?.error === 'Task not found') {
@@ -122,9 +139,19 @@ export class TaskService implements ITaskService {
   // Delete task
   async deleteTask(id: number): Promise<void> {
     try {
-      await axios.delete(`${this.baseURL}/tasks/${id}`);
+      const response: AxiosResponse<DeleteResponse> = await axios.delete(`${this.baseURL}/tasks/${id}`);
       
-      // The API returns { message: "Task deleted successfully" }
+      // Handle the new standardized response format
+      if (!response.data.success) {
+        throw new Error(response.data.message || `Failed to delete task ${id}`);
+      }
+      
+      // Verify that the deletion was successful
+      if (!response.data.data.deleted) {
+        throw new Error(`Task ${id} was not deleted successfully`);
+      }
+      
+      // The API returns { success: true, data: { deleted: true }, message: "Task deleted successfully" }
       // No need to return anything for delete operations
     } catch (error) {
       if (axios.isAxiosError(error)) {

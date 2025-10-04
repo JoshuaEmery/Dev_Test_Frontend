@@ -27,3 +27,24 @@ export interface ITaskService {
     createdAt: string;
     updatedAt?: string;
   }
+
+  // API response types based on the standardized endpoint responses
+  export interface ApiResponse {
+    success: boolean;
+    message: string;
+    error?: string;
+  }
+
+  export interface TasksResponse extends ApiResponse {
+    data: Task[];
+  }
+
+  export interface TaskResponse extends ApiResponse {
+    data: Task;
+  }
+
+  export interface DeleteResponse extends ApiResponse {
+    data: {
+      deleted: boolean;
+    };
+  }
