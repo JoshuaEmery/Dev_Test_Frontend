@@ -11,8 +11,8 @@ import {
 } from './types';
 
 export class TaskService implements ITaskService {
-  //private readonly baseURL = 'https://taskapi-app.calmtree-a2764f0e.eastus.azurecontainerapps.io';
-  private readonly baseURL = 'http://localhost:5001';
+  private readonly baseURL = 'https://taskapi-app.calmtree-a2764f0e.eastus.azurecontainerapps.io';
+  //private readonly baseURL = 'http://localhost:5001';
   // Get all tasks
   async getTasks(): Promise<Task[]> {
     const url = `${this.baseURL}/tasks`;
