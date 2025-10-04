@@ -274,24 +274,34 @@ export function TaskProvider({
         updatedAt: new Date().toISOString(),
       };
 
-      try {
-        // Optimistic update - show changes immediately
-        dispatch({ type: 'OPTIMISTIC_UPDATE_TASK', payload: optimisticTask });
+      // Optimistic update - show changes immediately
+      dispatch({ type: 'OPTIMISTIC_UPDATE_TASK', payload: optimisticTask });
 
-        // Make actual API call
-        const updatedTask = await serviceRef.current.updateTask(id, data);
+      // Return the optimistic task immediately for instant UI feedback
+      // Make API call in the background without blocking the UI
+      serviceRef.current.updateTask(id, data)
+        .then((updatedTask) => {
+          // Only update if the server response differs from our optimistic update
+          const hasChanges = 
+            updatedTask.title !== optimisticTask.title ||
+            updatedTask.description !== optimisticTask.description ||
+            updatedTask.completed !== optimisticTask.completed ||
+            updatedTask.updatedAt !== optimisticTask.updatedAt;
 
-        // Replace optimistic task with real task
-        dispatch({ type: 'UPDATE_TASK', payload: updatedTask });
-        return updatedTask;
-      } catch (error) {
-        // Revert optimistic update on error
-        dispatch({ type: 'REVERT_OPTIMISTIC_UPDATE', payload: currentTask });
-        const errorMessage =
-          error instanceof Error ? error.message : 'Failed to update task';
-        dispatch({ type: 'SET_ERROR', payload: errorMessage });
-        throw error; // Re-throw to allow component to handle
-      }
+          if (hasChanges) {
+            dispatch({ type: 'UPDATE_TASK', payload: updatedTask });
+          }
+        })
+        .catch((error) => {
+          // Revert optimistic update on error
+          dispatch({ type: 'REVERT_OPTIMISTIC_UPDATE', payload: currentTask });
+          const errorMessage =
+            error instanceof Error ? error.message : 'Failed to update task';
+          dispatch({ type: 'SET_ERROR', payload: errorMessage });
+        });
+
+      // Return the optimistic task immediately
+      return optimisticTask;
     },
     [state.tasks]
   );
