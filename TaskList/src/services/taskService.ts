@@ -17,7 +17,7 @@ interface TaskResponse extends ApiResponse {
 }
 
 export class TaskService implements ITaskService {
-  private readonly baseURL = 'http://localhost:5001';
+  private readonly baseURL = 'http://taskapi-devtest.eastus.azurecontainer.io:5001/';
 
   // Get all tasks
   async getTasks(): Promise<Task[]> {
