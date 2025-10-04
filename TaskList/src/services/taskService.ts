@@ -17,8 +17,7 @@ interface TaskResponse extends ApiResponse {
 }
 
 export class TaskService implements ITaskService {
-  private readonly baseURL = 'http://taskapi-devtest.eastus.azurecontainer.io:5001';
-
+  private readonly baseURL = 'https://taskapi-app.calmtree-a2764f0e.eastus.azurecontainerapps.io';
   // Get all tasks
   async getTasks(): Promise<Task[]> {
     const url = `${this.baseURL}/tasks`;
