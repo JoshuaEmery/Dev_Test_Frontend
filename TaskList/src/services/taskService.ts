@@ -17,18 +17,41 @@ interface TaskResponse extends ApiResponse {
 }
 
 export class TaskService implements ITaskService {
-  private readonly baseURL = 'http://taskapi-devtest.eastus.azurecontainer.io:5001/';
+  private readonly baseURL = 'http://taskapi-devtest.eastus.azurecontainer.io:5001';
 
   // Get all tasks
   async getTasks(): Promise<Task[]> {
+    const url = `${this.baseURL}/tasks`;
+    console.log(`[TaskService] Fetching tasks from: ${url}`);
+    
     try {
-      const response: AxiosResponse<TasksResponse> = await axios.get(`${this.baseURL}/tasks`);
+      const response: AxiosResponse<TasksResponse> = await axios.get(url);
+      
+      console.log(`[TaskService] Successfully fetched tasks:`, {
+        status: response.status,
+        statusText: response.statusText,
+        dataLength: response.data?.tasks?.length || 0,
+        message: response.data?.message
+      });
+      
       return response.data.tasks;
     } catch (error) {
+      console.error(`[TaskService] Error fetching tasks from ${url}:`, {
+        error: error,
+        isAxiosError: axios.isAxiosError(error),
+        status: axios.isAxiosError(error) ? error.response?.status : 'N/A',
+        statusText: axios.isAxiosError(error) ? error.response?.statusText : 'N/A',
+        responseData: axios.isAxiosError(error) ? error.response?.data : 'N/A',
+        requestConfig: axios.isAxiosError(error) ? {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers
+        } : 'N/A'
+      });
+      
       if (axios.isAxiosError(error) && error.response?.data?.error) {
         throw new Error(error.response.data.error);
       }
-      console.error('Error fetching tasks:', error);
       throw new Error('Failed to fetch tasks');
     }
   }
