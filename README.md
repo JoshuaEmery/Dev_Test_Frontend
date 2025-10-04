@@ -2,7 +2,7 @@
 
 ## https://witty-sand-09db3fe0f.1.azurestaticapps.net/
 
-- Allow time for the API to cold start when initially launching this page. It will likely take at least one refresh to get a response from the API, just deploying as cheaply as possible while in prod.
+- Allow time for the API to cold start when initially launching this page. It will likely take at least one refresh to get a response from the API. Azure cold starts are notoriously slow, just deploying as cheaply as possible while in prod.
 
 Project is build with React, TypeScript, and Vite. Package management via pnpm, testing via Jest.
 
